@@ -7,13 +7,22 @@ const gameBoard = (() => {
       square.textContent = array[index];
     });
   };
-  return { array, fill };
+  const reset = () => {
+    const squares = document.querySelectorAll(".square");
+    array = [];
+
+    squares.forEach((square, index) => {
+      square.textContent = "";
+    });
+  };
+
+  return { array, fill, reset };
 })();
 
 const game = (() => {
   const gameboardCont = document.querySelector(".gameboard-container");
   const gameResContainer = document.querySelector(".game-result-container");
-  const gameResText = document.querySelector(".game-result-container");
+  const gameResText = document.querySelector(".game-result");
 
   const checkPlayerWin = (player) => {
     const checkIfWin = () => {
@@ -72,7 +81,6 @@ const game = (() => {
       return result;
     }
 
-    console.log("test return");
     return { result: "none" };
   };
 
@@ -97,24 +105,43 @@ const game = (() => {
   let clicks = 0;
 
   const playGame = (player1, player2) => {
-    player1.placeMark();
-    player2.placeMark();
+    player1.placeMark("firstX");
+    // player2.placeMark("firstO");
 
     let listener = (e) => {
       let gameRes = game.checkWin(player1, player2);
       if (gameRes === "win" || gameRes === "tie") {
         return;
-      } else if (clicks < 5) {
+      } else if (clicks === 0) {
         clicks++;
-        console.log(clicks);
-        player1.placeMark();
-        player2.placeMark();
-        console.log("play game test");
+        console.log(`Clicks0  - ${clicks}`);
 
-        // game.checkWin(player1, player2);
+        player2.placeMark(`placeMarkO${clicks}`);
+      } else if (gameBoard.array[e.target.id.slice(-1)] === undefined) {
+        if (clicks < 4) {
+          clicks++;
+          console.log(`Clicks - ${clicks}`);
+
+          player1.placeMark(`placeMarkX${clicks}`);
+          player2.placeMark(`placeMarkO${clicks}`); // fix
+        } else if (clicks === 4) {
+          clicks++;
+          console.log(`Clicks - ${clicks}`);
+
+          player1.placeMark(`placeMarkX${clicks}`);
+        }
       }
+      console.log(`Clicks Outside- ${clicks}`);
     };
     gameboardCont.addEventListener("click", listener);
+
+    window.addEventListener("click", (event) => {
+      if (event.target == gameResContainer) {
+        hideResult();
+        restartGame();
+        player1.placeMark("firstX");
+      }
+    });
   };
 
   const displayResult = () => {
@@ -125,7 +152,11 @@ const game = (() => {
     gameResContainer.style.display = "none";
   };
 
-  const restartGame = () => {};
+  const restartGame = () => {
+    gameBoard.array = [];
+    clicks = 0;
+    gameBoard.reset();
+  };
   return { checkWin, playGame };
 })();
 
@@ -133,13 +164,13 @@ const game = (() => {
 const player = (name, mark) => {
   const gameboardCont = document.querySelector(".gameboard-container");
 
-  const placeMark = () => {
+  const placeMark = (test) => {
     let listener = (e) => {
       if (gameBoard.array[e.target.id.slice(-1)] === undefined) {
         e.target.textContent = mark;
         gameBoard.array[e.target.id.slice(-1)] = mark;
         gameboardCont.removeEventListener("click", listener);
-
+        console.log(test);
         game.checkWin(player1X, player2O);
       }
     };
