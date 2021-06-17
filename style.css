@@ -71,6 +71,7 @@ button:active {
   grid-template-columns: repeat(3, auto);
   grid-template-rows: repeat(3, auto);
   justify-content: center;
+  margin-top: 10px;
 }
 
 .square {
@@ -199,5 +200,34 @@ button:active {
 
   100% {
     opacity: 0;
+  }
+}
+
+@media (max-width: 500px) {
+  h1 {
+    font-size: 2rem;
+    margin: 50px 0 40px 0;
+  }
+
+  .names .player1 {
+    margin: 0 0 10px 10px;
+    font-size: 20px;
+  }
+
+  .names .player2 {
+    margin: 0 10px 10px 0;
+    font-size: 20px;
+  }
+
+  #player1-name,
+  #player2-name {
+    font-size: 25px;
+    font-weight: bold;
+  }
+
+  .square {
+    font-size: 40px;
+    width: 100px;
+    height: 100px;
   }
 }
