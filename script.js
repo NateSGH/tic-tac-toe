@@ -23,11 +23,32 @@ const gameBoard = (() => {
 })();
 
 const displayController = (() => {
+  const submitBtn = document.querySelector(".submit-btn");
+
+  submitBtn.addEventListener("click", (event) => {
+    event.preventDefault();
+    const playersForm = document.querySelector(".form");
+    player1X.name = playersForm.elements.player1.value;
+    player2O.name = playersForm.elements.player2.value;
+
+    document.querySelector(".name-input-container").style.display = "none";
+
+    const names = document.querySelector(".names");
+
+    names.style.display = "grid";
+    names.style["grid-template-columns"] = "1fr 1fr";
+    names.style["grid-template-rows"] = "repeat(2, 50px)";
+
+    document.getElementById("player1-name").textContent = player1X.name;
+    document.getElementById("player2-name").textContent = player2O.name;
+
+    event.preventDefault();
+  });
+
   const calcResultCoords = () => {
     let coords = document.getElementById("square4").getBoundingClientRect();
     let coordLeft = (coords.left + coords.right) / 2;
     let coordTop = (coords.top + coords.bottom) / 2;
-    console.log(`${coords.left} ${coords.top} ${coords.bottom}`);
     gameResText.style.left = coordLeft + "px";
     gameResText.style.top = coordTop + "px";
   };
@@ -35,10 +56,12 @@ const displayController = (() => {
   const displayResult = () => {
     calcResultCoords();
     gameResContainer.style.display = "block";
+    gameResContainer.style.animation = "fade-in 0.5s";
   };
 
   const hideResult = () => {
-    gameResContainer.style.display = "none";
+    gameResContainer.style.animation = "fade-out 0.5s";
+    setTimeout(() => (gameResContainer.style.display = "none"), 450);
   };
 
   return { calcResultCoords, displayResult, hideResult };
@@ -128,6 +151,8 @@ const game = (() => {
   const playGame = (player1, player2) => {
     const squares = document.querySelectorAll(".square");
 
+    const restartBtn = document.querySelector(".restart-btn");
+
     squares.forEach((square) => {
       square.addEventListener(
         "click",
@@ -139,18 +164,22 @@ const game = (() => {
               player2.placeMark(square);
             }
             isNowX = !isNowX;
-            console.log("play game listener test");
             checkWin(player1, player2);
           }
         },
         { once: true }
       );
     });
+
     window.addEventListener("click", (event) => {
       if (event.target == gameResContainer) {
         displayController.hideResult();
         restartGame(player1, player2);
       }
+    });
+
+    restartBtn.addEventListener("click", () => {
+      restartGame(player1, player2);
     });
   };
 
@@ -181,5 +210,8 @@ window.addEventListener("resize", () => {
 
 const player1X = player("Jeff", "X");
 const player2O = player("Alex", "O");
+
+// const player1X = "";
+// const player2O = "";
 
 game.playGame(player1X, player2O);

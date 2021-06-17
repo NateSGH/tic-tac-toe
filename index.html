@@ -11,8 +11,25 @@
 
 <body>
   <h1>Tic Tac Toe</h1>
+  <div class="names">
+    <p class="player1">Player One (X): </p>
+    <p class="player2">Player Two (O): </p>
+    <p class="player1" id="player1-name"></p>
+    <p class="player2" id="player2-name"></p>
+  </div>
 
+  <div class="name-input-container">
+    <div class="name-input">
+      <form class="form">
+        <p>Player 1</p>
+        <input type="text" placeholder="Enter Name" id="player1" required>
+        <p>Player 2</p>
+        <input type="text" placeholder="Enter Name" id="player2" required>
 
+        <button type="submit" class="btn submit-btn">Submit</button>
+      </form>
+    </div>
+  </div>
 
   <div class="gameboard-container" id="gameboard">
     <div class="square" id="square0"></div>
@@ -28,7 +45,9 @@
     <div class="square" id="square8"></div>
   </div>
 
-  <div class="game-result-container">
+  <button class="btn restart-btn">Restart</button>
+
+  <div class=" game-result-container">
     <p class="game-result">Test</p>
   </div>
 
