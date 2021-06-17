@@ -23,26 +23,17 @@ const gameBoard = (() => {
 })();
 
 const displayController = (() => {
-  const submitBtn = document.querySelector(".submit-btn");
+  const playersForm = document.querySelector(".form");
 
-  submitBtn.addEventListener("click", (event) => {
+  playersForm.addEventListener("submit", (event) => {
     event.preventDefault();
-    const playersForm = document.querySelector(".form");
     player1X.name = playersForm.elements.player1.value;
     player2O.name = playersForm.elements.player2.value;
 
     document.querySelector(".name-input-container").style.display = "none";
 
-    const names = document.querySelector(".names");
-
-    names.style.display = "grid";
-    names.style["grid-template-columns"] = "1fr 1fr";
-    names.style["grid-template-rows"] = "repeat(2, 50px)";
-
     document.getElementById("player1-name").textContent = player1X.name;
     document.getElementById("player2-name").textContent = player2O.name;
-
-    event.preventDefault();
   });
 
   const calcResultCoords = () => {

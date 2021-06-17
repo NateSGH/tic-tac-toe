@@ -1,27 +1,31 @@
-@import url("https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Varela+Round&display=swap");
 
 :root {
   --square-bg-color: rgba(216, 216, 216, 0.5);
-  --result-bg-color: rgba(216, 216, 216, 0.5);
+  --form-bg-color: rgba(216, 216, 216, 1);
   --border-color: rgba(0, 63, 99, 1);
   --text-color: rgba(0, 63, 99, 1);
   --btn-color: rgba(0, 63, 99, 0.8);
   --btn-hover-color: rgba(0, 63, 99, 0.9);
+  --gameboard-radius: 15px;
 }
 
 body {
-  font-family: "Roboto", sans-serif;
+  font-family: "Varela Round", sans-serif;
   text-align: center;
   color: var(--text-color);
 }
 
 h1 {
   margin: 80px 0 60px 0;
-  font-size: 50px;
+  font-size: 60px;
+  font-weight: bold;
 }
 
 button {
   background-color: var(--btn-color);
+  font-family: "Varela Round", sans-serif;
+  font-size: 15px;
   border: none;
   border-radius: 5px;
   color: white;
@@ -40,7 +44,9 @@ button:active {
 }
 
 .names {
-  display: none;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  grid-template-rows: repeat(2, 50px);
   font-size: 25px;
 }
 
@@ -68,6 +74,8 @@ button:active {
 }
 
 .square {
+  font-size: 50px;
+  font-weight: bold;
   background-color: var(--square-bg-color);
   border: 1px solid var(--border-color);
   width: 150px;
@@ -76,14 +84,29 @@ button:active {
   align-items: center;
   justify-content: center;
   text-align: center;
-  font-size: 40px;
+}
+
+#square0 {
+  border-top-left-radius: var(--gameboard-radius);
+}
+
+#square2 {
+  border-top-right-radius: var(--gameboard-radius);
+}
+
+#square6 {
+  border-bottom-left-radius: var(--gameboard-radius);
+}
+
+#square8 {
+  border-bottom-right-radius: var(--gameboard-radius);
 }
 
 .restart-btn {
   font-size: 15px;
-  margin: 30px;
-  height: 40px;
-  width: 100px;
+  margin: 40px;
+  height: 50px;
+  width: 120px;
 }
 
 .game-result-container {
@@ -119,10 +142,11 @@ button:active {
 
 .name-input {
   position: fixed;
+  background-color: var(--form-bg-color);
   border: 3px solid var(--border-color);
   border-radius: 10px;
   width: auto;
-  top: 30%;
+  top: 25%;
   left: 50%;
   transform: translateX(-50%);
 }
@@ -135,13 +159,16 @@ button:active {
 }
 
 .name-input p {
+  align-self: center;
   font-size: 1.8rem;
   font-weight: bold;
-  margin: 20px 15px 10px 15px;
+  margin: 20px 15px 15px 15px;
 }
 
 .name-input input {
-  font-size: 15px;
+  font-family: "Varela Round", sans-serif;
+  text-align: center;
+  font-size: 18px;
   margin: 0 15px 15px 15px;
   width: 200px;
   height: 30px;
