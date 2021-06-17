@@ -1,3 +1,6 @@
+const gameResContainer = document.querySelector(".game-result-container");
+const gameResText = document.querySelector(".game-result");
+
 // Modules
 const gameBoard = (() => {
   let array = [];
@@ -19,11 +22,29 @@ const gameBoard = (() => {
   return { array, fill, reset };
 })();
 
-const game = (() => {
-  const gameboardCont = document.querySelector(".gameboard-container");
-  const gameResContainer = document.querySelector(".game-result-container");
-  const gameResText = document.querySelector(".game-result");
+const displayController = (() => {
+  const calcResultCoords = () => {
+    let coords = document.getElementById("square4").getBoundingClientRect();
+    let coordLeft = (coords.left + coords.right) / 2;
+    let coordTop = (coords.top + coords.bottom) / 2;
+    console.log(`${coords.left} ${coords.top} ${coords.bottom}`);
+    gameResText.style.left = coordLeft + "px";
+    gameResText.style.top = coordTop + "px";
+  };
 
+  const displayResult = () => {
+    calcResultCoords();
+    gameResContainer.style.display = "block";
+  };
+
+  const hideResult = () => {
+    gameResContainer.style.display = "none";
+  };
+
+  return { calcResultCoords, displayResult, hideResult };
+})();
+
+const game = (() => {
   const checkPlayerWin = (player) => {
     const checkIfWin = () => {
       for (let i = 0; i < 3; i++) {
@@ -89,97 +110,74 @@ const game = (() => {
     let resultO = checkPlayerWin(player2);
     if (resultX.result === "win") {
       gameResText.textContent = `${resultX.name} (${resultX.mark}) wins!`;
-      displayResult();
+      displayController.displayResult();
       return resultX.result;
     } else if (resultO.result === "win") {
       gameResText.textContent = `${resultO.name} (${resultO.mark}) wins!`;
-      displayResult();
+      displayController.displayResult();
       return resultO.result;
     } else if (resultX.result === "tie" || resultO.result === "tie") {
       gameResText.textContent = "It's a tie!";
-      displayResult();
+      displayController.displayResult();
       return "tie";
     }
   };
 
-  let clicks = 0;
+  let isNowX = true;
 
   const playGame = (player1, player2) => {
-    player1.placeMark("firstX");
-    // player2.placeMark("firstO");
+    const squares = document.querySelectorAll(".square");
 
-    let listener = (e) => {
-      let gameRes = game.checkWin(player1, player2);
-      if (gameRes === "win" || gameRes === "tie") {
-        return;
-      } else if (clicks === 0) {
-        clicks++;
-        console.log(`Clicks0  - ${clicks}`);
-
-        player2.placeMark(`placeMarkO${clicks}`);
-      } else if (gameBoard.array[e.target.id.slice(-1)] === undefined) {
-        if (clicks < 4) {
-          clicks++;
-          console.log(`Clicks - ${clicks}`);
-
-          player1.placeMark(`placeMarkX${clicks}`);
-          player2.placeMark(`placeMarkO${clicks}`); // fix
-        } else if (clicks === 4) {
-          clicks++;
-          console.log(`Clicks - ${clicks}`);
-
-          player1.placeMark(`placeMarkX${clicks}`);
-        }
-      }
-      console.log(`Clicks Outside- ${clicks}`);
-    };
-    gameboardCont.addEventListener("click", listener);
-
+    squares.forEach((square) => {
+      square.addEventListener(
+        "click",
+        () => {
+          if (gameBoard.array[square.id.slice(-1)] === undefined) {
+            if (isNowX) {
+              player1.placeMark(square);
+            } else {
+              player2.placeMark(square);
+            }
+            isNowX = !isNowX;
+            console.log("play game listener test");
+            checkWin(player1, player2);
+          }
+        },
+        { once: true }
+      );
+    });
     window.addEventListener("click", (event) => {
       if (event.target == gameResContainer) {
-        hideResult();
-        restartGame();
-        player1.placeMark("firstX");
+        displayController.hideResult();
+        restartGame(player1, player2);
       }
     });
   };
 
-  const displayResult = () => {
-    gameResContainer.style.display = "block";
-  };
-
-  const hideResult = () => {
-    gameResContainer.style.display = "none";
-  };
-
-  const restartGame = () => {
+  const restartGame = (player1, player2) => {
     gameBoard.array = [];
-    clicks = 0;
+    isNowX = true;
     gameBoard.reset();
+    playGame(player1, player2);
   };
-  return { checkWin, playGame };
+  return { playGame };
 })();
 
 // Factories
 const player = (name, mark) => {
-  const gameboardCont = document.querySelector(".gameboard-container");
-
-  const placeMark = (test) => {
-    let listener = (e) => {
-      if (gameBoard.array[e.target.id.slice(-1)] === undefined) {
-        e.target.textContent = mark;
-        gameBoard.array[e.target.id.slice(-1)] = mark;
-        gameboardCont.removeEventListener("click", listener);
-        console.log(test);
-        game.checkWin(player1X, player2O);
-      }
-    };
-
-    gameboardCont.addEventListener("click", listener);
+  const placeMark = (square) => {
+    square.textContent = mark;
+    gameBoard.array[square.id.slice(-1)] = mark;
   };
 
   return { name, mark, placeMark };
 };
+
+window.addEventListener("resize", () => {
+  if (gameResContainer.style.display === "block") {
+    displayController.calcResultCoords();
+  }
+});
 
 const player1X = player("Jeff", "X");
 const player2O = player("Alex", "O");
