@@ -1,6 +1,6 @@
 # Tic-Tac-Toe
 
-Tic-Tac-Toe app using HTML, CSS and Vanilla JS with:
+Tic-Tac-Toe app using HTML, CSS and JavaScript with:
 
 - A form that allows players to add names
 - A game result notifier
@@ -8,4 +8,12 @@ Tic-Tac-Toe app using HTML, CSS and Vanilla JS with:
 
 This project is a part of [The Odin Project](https://www.theodinproject.com/)'s curriculum.
 
-Live Demo: [Live Demo Link](https://natesgh.github.io/tic-tac-toe/)
+## Build With
+
+- HTML
+- CSS
+- JavaScript
+
+## Live Demo:
+
+[Link](https://natesgh.github.io/tic-tac-toe/)
